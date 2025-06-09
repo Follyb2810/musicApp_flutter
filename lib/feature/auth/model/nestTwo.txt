@@ -1,0 +1,156 @@
+class LandListing {
+  final String id;
+  final String title;
+  final String description;
+  final double price;
+  final double specialOfferPrice;
+  final dynamic category; // You can create a Category model if needed
+  final Seller seller;
+  final int stock;
+  final int beds;
+  final int baths;
+  final String address;
+  final List<String> imageOfLand;
+  final String coverImage;
+  final String sizeOfLand;
+  final List<String> documentOfLand;
+  final bool isSpecialOffer;
+  final bool isBestDeal;
+  final bool isTopSelling;
+  final String offerStartDate;
+  final String offerEndDate;
+  final List<String> tags;
+  final int totalSold;
+  final List<dynamic> likes;
+  final int likeCount;
+  final List<dynamic> likedBy;
+  final bool isActive;
+  final String createdAt;
+  final String updatedAt;
+  final double percentage;
+  final int v;
+
+  LandListing({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.price,
+    required this.specialOfferPrice,
+    required this.category,
+    required this.seller,
+    required this.stock,
+    required this.beds,
+    required this.baths,
+    required this.address,
+    required this.imageOfLand,
+    required this.coverImage,
+    required this.sizeOfLand,
+    required this.documentOfLand,
+    required this.isSpecialOffer,
+    required this.isBestDeal,
+    required this.isTopSelling,
+    required this.offerStartDate,
+    required this.offerEndDate,
+    required this.tags,
+    required this.totalSold,
+    required this.likes,
+    required this.likeCount,
+    required this.likedBy,
+    required this.isActive,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.percentage,
+    required this.v,
+  });
+
+  factory LandListing.fromJson(Map<String, dynamic> json) {
+    return LandListing(
+      id: json['_id'],
+      title: json['title'],
+      description: json['description'],
+      price: (json['price'] ?? 0).toDouble(),
+      specialOfferPrice: (json['specialOfferPrice'] ?? 0).toDouble(),
+      category: json['category'], // replace with model if needed
+      seller: Seller.fromJson(json['seller']),
+      stock: json['stock'],
+      beds: json['beds'],
+      baths: json['baths'],
+      address: json['address'],
+      imageOfLand: List<String>.from(json['image_of_land']),
+      coverImage: json['coverImage'],
+      sizeOfLand: json['size_of_land'],
+      documentOfLand: List<String>.from(json['document_of_land']),
+      isSpecialOffer: json['isSpecialOffer'],
+      isBestDeal: json['isBestDeal'],
+      isTopSelling: json['isTopSelling'],
+      offerStartDate: json['offerStartDate'],
+      offerEndDate: json['offerEndDate'],
+      tags: List<String>.from(json['tags']),
+      totalSold: json['totalSold'],
+      likes: List<dynamic>.from(json['likes']),
+      likeCount: json['likeCount'],
+      likedBy: List<dynamic>.from(json['likedBy']),
+      isActive: json['isActive'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      percentage: (json['percentage'] ?? 0).toDouble(),
+      v: json['__v'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'title': title,
+      'description': description,
+      'price': price,
+      'specialOfferPrice': specialOfferPrice,
+      'category': category, // If it's a model, call .toJson()
+      'seller': seller.toJson(),
+      'stock': stock,
+      'beds': beds,
+      'baths': baths,
+      'address': address,
+      'image_of_land': imageOfLand,
+      'coverImage': coverImage,
+      'size_of_land': sizeOfLand,
+      'document_of_land': documentOfLand,
+      'isSpecialOffer': isSpecialOffer,
+      'isBestDeal': isBestDeal,
+      'isTopSelling': isTopSelling,
+      'offerStartDate': offerStartDate,
+      'offerEndDate': offerEndDate,
+      'tags': tags,
+      'totalSold': totalSold,
+      'likes': likes,
+      'likeCount': likeCount,
+      'likedBy': likedBy,
+      'isActive': isActive,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'percentage': percentage,
+      '__v': v,
+    };
+  }
+}
+
+class Seller {
+  final String id;
+  final String? walletAddress;
+
+  Seller({required this.id, this.walletAddress});
+
+  factory Seller.fromJson(Map<String, dynamic> json) {
+    return Seller(
+      id: json['_id'],
+      walletAddress: json['walletAddress'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'walletAddress': walletAddress,
+    };
+  }
+}

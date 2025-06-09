@@ -1,0 +1,165 @@
+class Payment {
+  final double amount;
+  final String txHash;
+
+  Payment({required this.amount, required this.txHash});
+
+  factory Payment.fromJson(Map<String, dynamic> json) {
+    return Payment(
+      amount: json['amount'].toDouble(),
+      txHash: json['txHash'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'amount': amount,
+      'txHash': txHash,
+    };
+  }
+}
+
+class Product {
+  final String id;
+  final double price;
+  final int stock;
+  final String imageOfLand;
+
+  Product({
+    required this.id,
+    required this.price,
+    required this.stock,
+    required this.imageOfLand,
+  });
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['_id'],
+      price: json['price'].toDouble(),
+      stock: json['stock'],
+      imageOfLand: json['image_of_land'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'price': price,
+      'stock': stock,
+      'image_of_land': imageOfLand,
+    };
+  }
+}
+
+class Item {
+  final Product product;
+  final int quantity;
+  final double price;
+  final String id;
+
+  Item({
+    required this.product,
+    required this.quantity,
+    required this.price,
+    required this.id,
+  });
+
+  factory Item.fromJson(Map<String, dynamic> json) {
+    return Item(
+      product: Product.fromJson(json['product']),
+      quantity: json['quantity'],
+      price: json['price'].toDouble(),
+      id: json['_id'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'product': product.toJson(),
+      'quantity': quantity,
+      'price': price,
+      '_id': id,
+    };
+  }
+}
+
+class UserOrderHistory {
+  final String id;
+  final Payment payment;
+  final List<Item> items;
+  final String status;
+  final double totalAmount;
+  final DateTime createdAt;
+
+  UserOrderHistory({
+    required this.id,
+    required this.payment,
+    required this.items,
+    required this.status,
+    required this.totalAmount,
+    required this.createdAt,
+  });
+
+  factory UserOrderHistory.fromJson(Map<String, dynamic> json) {
+    var itemsJson = json['items'] as List;
+    List<Item> itemsList = itemsJson.map((itemJson) => Item.fromJson(itemJson)).toList();
+
+    return UserOrderHistory(
+      id: json['_id'],
+      payment: Payment.fromJson(json['payment']),
+      items: itemsList,
+      status: json['status'],
+      totalAmount: json['totalAmount'].toDouble(),
+      createdAt: DateTime.parse(json['createdAt']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'payment': payment.toJson(),
+      'items': items.map((item) => item.toJson()).toList(),
+      'status': status,
+      'totalAmount': totalAmount,
+      'createdAt': createdAt.toIso8601String(),
+    };
+  }
+}
+import 'dart:convert';
+
+void main() {
+  final jsonString = '''
+  {
+    "_id": "order123",
+    "payment": {
+      "amount": 150.5,
+      "txHash": "abc123hash"
+    },
+    "items": [
+      {
+        "product": {
+          "_id": "prod1",
+          "price": 50.5,
+          "stock": 10,
+          "image_of_land": "image1.png"
+        },
+        "quantity": 2,
+        "price": 101.0,
+        "_id": "item1"
+      }
+    ],
+    "status": "completed",
+    "totalAmount": 150.5,
+    "createdAt": "2023-06-06T12:34:56Z"
+  }
+  ''';
+
+  Map<String, dynamic> decoded = jsonDecode(jsonString);
+
+  UserOrderHistory order = UserOrderHistory.fromJson(decoded);
+
+  print(order.id); // order123
+  print(order.payment.txHash); // abc123hash
+  print(order.items[0].product.price); // 50.5
+  print(order.createdAt); // 2023-06-06 12:34:56.000Z
+}

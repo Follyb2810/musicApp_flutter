@@ -1,0 +1,165 @@
+## 🟦 1. `StateNotifier<T>` & `StateNotifierProvider`
+
+
+### ✅ How to use:
+
+```dart
+// counter.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// 1. StateNotifier manages the state
+class Counter extends StateNotifier<int> {
+  Counter() : super(0);
+
+  void increment() => state++;
+  void decrement() => state--;
+}
+
+// 2. Provider to expose Counter
+final counterProvider = StateNotifierProvider<Counter, int>((ref) => Counter());
+```
+
+### ✅ How to consume:
+
+```dart
+// In a widget
+final count = ref.watch(counterProvider);
+final counter = ref.read(counterProvider.notifier);
+```
+
+---
+
+## 🟨 2. `Notifier<T>` & `NotifierProvider` (newer and simpler)
+
+
+### ✅ How to use:
+
+```dart
+// auth_viewmodel.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class AuthViewModel extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void login() => state = 1;
+  void logout() => state = 0;
+}
+
+// Provider to expose AuthViewModel
+final authProvider = NotifierProvider<AuthViewModel, int>(() => AuthViewModel());
+```
+
+### ✅ How to consume:
+
+```dart
+// In a widget
+final authState = ref.watch(authProvider);
+final authNotifier = ref.read(authProvider.notifier);
+```
+
+// usage
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// StateNotifier manages int state
+class Counter extends StateNotifier<int> {
+  Counter() : super(0);
+
+  void increment() => state++;
+  void decrement() => state--;
+}
+
+// Provider exposes Counter state
+final counterProvider = StateNotifierProvider<Counter, int>((ref) => Counter());
+
+void main() {
+  runApp(
+    ProviderScope(child: MyApp()),
+  );
+}
+
+class MyApp extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(counterProvider);
+    final counter = ref.read(counterProvider.notifier);
+
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('StateNotifier Example')),
+        body: Center(
+          child: Text('Count: $count', style: TextStyle(fontSize: 40)),
+        ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: counter.decrement,
+              child: Icon(Icons.remove),
+            ),
+            SizedBox(width: 16),
+            FloatingActionButton(
+              onPressed: counter.increment,
+              child: Icon(Icons.add),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 2
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Notifier manages int state with build method
+class CounterNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void increment() => state++;
+  void decrement() => state--;
+}
+
+// Provider exposes CounterNotifier state
+final counterNotifierProvider = NotifierProvider<CounterNotifier, int>(() => CounterNotifier());
+
+void main() {
+  runApp(
+    ProviderScope(child: MyApp()),
+  );
+}
+
+class MyApp extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(counterNotifierProvider);
+    final counter = ref.read(counterNotifierProvider.notifier);
+
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Notifier Example')),
+        body: Center(
+          child: Text('Count: $count', style: TextStyle(fontSize: 40)),
+        ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: counter.decrement,
+              child: Icon(Icons.remove),
+            ),
+            SizedBox(width: 16),
+            FloatingActionButton(
+              onPressed: counter.increment,
+              child: Icon(Icons.add),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "message": "User created successfully",
+  "statusCode": 201,
+  "data": {
+    "token": "your_jwt_token",
+    "user": {
+      "id": "123",
+      "email": "user@example.com",
+      "userName": "someuser"
+    }
+  }
+}
+// flutter
+{
+  "token": "your_jwt_token",
+  "user": {
+    "id": "...",
+    "email": "...",
+    "userName": "..."
+  }
+}
+ class UserModel {
+  final DataModel user;
+  final int statusCode;
+  final String? message;
+
+  UserModel({
+    required this.user,
+    required this.statusCode,
+    this.message,
+  });
+
+  factory UserModel.fromJson(Map<String, dynamic> json, int statusCode) {
+    return UserModel(
+      user: DataModel.fromJson({
+        ...json['user'],
+        'token': json['token'] ?? '', // assign token to DataModel
+      }),
+      statusCode: statusCode,
+      message: json['message'],
+    );
+  }
+}

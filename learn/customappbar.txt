@@ -1,0 +1,353 @@
+ import 'package:flutter/material.dart';
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final double height;
+  final bool showProfile;
+  final bool showNotifications;
+
+  const CustomAppBar({
+    super.key,
+    required this.title,
+    this.height = 100, // custom height
+    this.showProfile = false,
+    this.showNotifications = false,
+  });
+
+  @override
+  Size get preferredSize => Size.fromHeight(height);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: const BoxDecoration(
+        color: Colors.blue,
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Left side (Title)
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // Right side (Actions)
+          Row(
+            children: [
+              if (showNotifications)
+                IconButton(
+                  icon: const Icon(Icons.notifications_none, color: Colors.white),
+                  onPressed: () {},
+                ),
+              if (showProfile)
+                const CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage('assets/profile.jpg'), // Replace with your image
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Scaffold(
+  appBar: CustomAppBar(
+    title: 'Dashboard',
+    showProfile: true,
+    showNotifications: true,
+    height: 120,
+  ),
+  body: Center(child: Text('Hello, world!')),
+)
+Awesome question! You can customize the `AppBar` far beyond just title and icons. Below is a list of **creative and practical customizations** you can apply using a custom `PreferredSizeWidget`.
+
+---
+
+### 🔧 Common and Creative Custom AppBar Customizations
+
+#### ✅ 1. **Search Bar AppBar**
+
+A search field instead of a title, great for search pages.
+
+```dart
+AppBar(
+  title: TextField(
+    decoration: InputDecoration(
+      hintText: "Search...",
+      border: InputBorder.none,
+    ),
+  ),
+)
+```
+
+Or in your own `PreferredSizeWidget`, use a `TextField` inside the `Row`.
+
+---
+
+#### ✅ 2. **Gradient Background AppBar**
+
+Add a gradient to your custom AppBar.
+
+```dart
+decoration: const BoxDecoration(
+  gradient: LinearGradient(
+    colors: [Colors.blue, Colors.purple],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  ),
+),
+```
+
+---
+
+#### ✅ 3. **Tabs Inside AppBar**
+
+Combine with `TabBar` for sections.
+
+```dart
+Column(
+  children: [
+    Text('My AppBar Title'),
+    TabBar(tabs: [...]), // Must be wrapped with DefaultTabController
+  ],
+)
+```
+
+> This needs `DefaultTabController` at a higher level.
+
+---
+
+#### ✅ 4. **AppBar with Avatar and Welcome Message**
+
+```dart
+Row(
+  children: [
+    CircleAvatar(backgroundImage: ...),
+    SizedBox(width: 10),
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Welcome Back!"),
+        Text("John Doe", style: TextStyle(fontWeight: FontWeight.bold)),
+      ],
+    )
+  ],
+)
+```
+
+---
+
+#### ✅ 5. **Custom AppBar with Back Button + Action**
+
+Design your own back button and actions.
+
+```dart
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () => Navigator.pop(context),
+    ),
+    Text('Details'),
+    IconButton(
+      icon: Icon(Icons.share),
+      onPressed: () {},
+    ),
+  ],
+)
+```
+
+---
+
+#### ✅ 6. **Animated AppBar (Fade/Slide)**
+
+Wrap the `AppBar` content in an `AnimatedOpacity`, `AnimatedContainer`, or `SlideTransition` for entrance effects.
+
+---
+
+#### ✅ 7. **Notification Badge**
+
+Use `Stack` to show a red dot or number over an icon:
+
+```dart
+Stack(
+  children: [
+    Icon(Icons.notifications),
+    Positioned(
+      right: 0,
+      top: 0,
+      child: Container(
+        padding: EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          shape: BoxShape.circle,
+        ),
+        child: Text("3", style: TextStyle(fontSize: 10, color: Colors.white)),
+      ),
+    )
+  ],
+)
+```
+
+---
+
+#### ✅ 8. **Search + Filter Combo**
+
+Add a search input, then a filter icon to the right.
+
+---
+
+#### ✅ 9. **Expandable AppBar**
+
+You can create one that changes height or reveals more on scroll — like a `SliverAppBar`.
+
+---
+
+### 🎯 Pro Tip: Combine `CustomAppBar` with Other Widgets
+
+Your custom AppBar doesn’t need to *look* like an AppBar. It can be:
+
+* A dashboard header
+* A user profile panel
+* A store banner with cart and filters
+
+---
+
+Would you like an example of any of these in full code? Just tell me which one!
+Great! Let’s do a **full code example** of a **Custom AppBar with a search bar, profile avatar, and notification badge** — something practical and stylish.
+
+---
+
+### 🎯 Goal:
+
+* Custom height
+* Title or search bar
+* Notification bell with a badge
+* Profile avatar
+
+---
+
+### ✅ Full Working Code:
+
+```dart
+import 'package:flutter/material.dart';
+
+class FancyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final double height;
+
+  const FancyAppBar({super.key, this.height = 100});
+
+  @override
+  Size get preferredSize => Size.fromHeight(height);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.indigo, Colors.deepPurple],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
+      ),
+      child: SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // 👇 Search Bar
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    border: InputBorder.none,
+                    icon: Icon(Icons.search),
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(width: 16),
+
+            // 🔔 Notification with badge
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.notifications_none, color: Colors.white),
+                  onPressed: () {},
+                ),
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                )
+              ],
+            ),
+
+            const SizedBox(width: 8),
+
+            // 🧑 Profile avatar
+            const CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage('assets/profile.jpg'), // Replace with your image
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+---
+
+### 🧪 Use it in Your Scaffold:
+
+```dart
+Scaffold(
+  appBar: const FancyAppBar(),
+  body: Center(child: Text('Custom AppBar Demo')),
+);
+```
+
+---
+
+### 📦 Assets Reminder:
+
+Ensure you have your profile image added in `pubspec.yaml` like this:
+
+```yaml
+flutter:
+  assets:
+    - assets/profile.jpg
+```
+
+---
+
+Would you like this version to be **responsive**, **toggle search mode**, or switch into a **collapsed AppBar on scroll** (like `SliverAppBar`)?
+ 

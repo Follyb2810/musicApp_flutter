@@ -1,0 +1,126 @@
+In Flutter, **decorators** are not explicitly called "decorators" like in some other languages (e.g., Python), but they generally refer to **UI styling or configuration objects** that modify widgets or input fields, most commonly:
+
+---
+
+## 🔹 Common "Decorator"-like Widgets/Objects in Flutter
+
+### 1. **`BoxDecoration`**
+
+Used with `Container` or `DecoratedBox` to style a box.
+
+```dart
+Container(
+  decoration: BoxDecoration(
+    color: Colors.blue,
+    borderRadius: BorderRadius.circular(10),
+    boxShadow: [
+      BoxShadow(color: Colors.black26, blurRadius: 5),
+    ],
+  ),
+)
+```
+
+---
+
+### 2. **`InputDecoration`**
+
+Used in `TextField` or `TextFormField` to style the input field.
+
+```dart
+TextField(
+  decoration: InputDecoration(
+    hintText: 'Enter your name',
+    border: OutlineInputBorder(),
+  ),
+)
+```
+
+---
+
+### 3. **`ShapeDecoration`**
+
+Used when you want to specify a shape and a color.
+
+```dart
+DecoratedBox(
+  decoration: ShapeDecoration(
+    shape: StadiumBorder(),
+    color: Colors.green,
+  ),
+)
+```
+
+---
+
+### 4. **`DecorationImage`**
+
+Used inside `BoxDecoration` to decorate with an image.
+
+```dart
+Container(
+  decoration: BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('assets/bg.jpg'),
+      fit: BoxFit.cover,
+    ),
+  ),
+)
+```
+
+---
+
+### 5. **`ButtonStyle` and `InputDecorationTheme`**
+
+Used as themes to apply consistent styles across widgets.
+
+```dart
+ElevatedButton(
+  style: ElevatedButton.styleFrom(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  ),
+  onPressed: () {},
+  child: Text("Press me"),
+)
+```
+
+---
+
+## 🔸 Advanced Theming/Decoration Patterns
+
+### 6. **`ThemeData` & `Theme` widget**
+
+Global styling for an entire app or widget subtree.
+
+```dart
+Theme(
+  data: Theme.of(context).copyWith(
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(),
+    ),
+  ),
+  child: TextField(),
+)
+```
+
+---
+
+### 7. **`SliverAppBar` decoration via `flexibleSpace`**
+
+You can decorate slivers using `flexibleSpace` or other widget-based stylings.
+
+---
+
+## 🟢 Summary Table
+
+| Decoration Type   | Used In                | Purpose                       |
+| ----------------- | ---------------------- | ----------------------------- |
+| `BoxDecoration`   | `Container`, `Box`     | Backgrounds, borders, shadows |
+| `InputDecoration` | `TextField`            | Customize field look          |
+| `ShapeDecoration` | `DecoratedBox`         | Apply shape and color         |
+| `DecorationImage` | `BoxDecoration`        | Add image backgrounds         |
+| `ThemeData`       | `MaterialApp`, `Theme` | Global app styling            |
+| `ButtonStyle`     | `ElevatedButton`, etc. | Button look customization     |
+
+Let me know if you're looking for decorators in a more functional or annotation-like sense (e.g., metadata for classes/methods) — Flutter doesn't use decorators like `@decorator` in Python/Angular, but I can explain equivalents.
