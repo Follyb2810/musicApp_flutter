@@ -1,5 +1,9 @@
 # Uncomment this line to define a global platform for your project
 # platform :ios, '12.0'
+# i add this 
+# platform :ios, '13.0'
+platform :ios, '16.0'
+
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -29,8 +33,14 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!
+  # i add this
+  # pod 'SDWebImage', '~> 5.20.3'
+  # pod 'SDWebImage', '~> 5.21.0' # <-- or just pod 'SDWebImage'
+  pod 'SDWebImage', '~> 5.15.0' # or a later version
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  
   target 'RunnerTests' do
     inherit! :search_paths
   end

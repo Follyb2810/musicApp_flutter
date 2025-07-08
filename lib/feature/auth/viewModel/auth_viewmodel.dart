@@ -1,4 +1,5 @@
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:musicapp/core/failure/app_failure.dart';
 import 'package:musicapp/core/providers/current_user_notiifier.dart';
 import 'package:musicapp/feature/auth/model/user_model.dart';
 import 'package:musicapp/feature/auth/repositories/auth_local_repository.dart';
@@ -57,15 +58,33 @@ class AuthViewModel extends _$AuthViewModel {
       password: password,
     );
     final val = switch (response) {
-      fp.Left(value: final l) => state = AsyncValue.error(
-        l.message,
-        StackTrace.current,
-      ),
+      fp.Left(value: final l) => _getError(l),
+      //  state = AsyncValue.error(
+      //   l.message,
+      //   StackTrace.current,
+      // ),
       fp.Right(value: final r) => _loginSucces(r),
       // fp.Right(value: final r) => state = AsyncValue.data(r),
     };
 
     print('this is the last $val');
+  }
+
+  Future<void> logoutUser() async {
+    final success = await _authLocalRepository.removeToken();
+
+    if (success) {
+      _currentUserNotifier.clearUser();
+      // state = const AsyncValue.data(null);
+      print("User successfully logged out.");
+    } else {
+      print("Failed to remove token.");
+    }
+  }
+
+  Future _getError(AppFailure l) async {
+    await _authLocalRepository.removeToken();
+    state = AsyncValue.error(l.message, StackTrace.current);
   }
 
   AsyncValue<UserModel>? _loginSucces(UserModel usermodel) {
@@ -76,19 +95,25 @@ class AuthViewModel extends _$AuthViewModel {
 
   Future<UserModel?> getData() async {
     state = AsyncValue.loading();
-    final token = _authLocalRepository.getToken();
-    if (token != null) {
+    final token = await _authLocalRepository.getToken();
+    print("Fetched token: $token");
+
+    if (token != null && token.isNotEmpty) {
       final response = await _authRemoteRepository.getCurrentUser(token);
+
       final val = switch (response) {
         fp.Left(value: final l) => state = AsyncValue.error(
           l.message,
           StackTrace.current,
         ),
+
         fp.Right(value: final r) => _getDataSuccess(r),
-        // fp.Right(value: final r) => state = AsyncValue.data(r),
       };
+
       return val.value;
     }
+
+    print("Token is null or empty.");
     return null;
   }
 

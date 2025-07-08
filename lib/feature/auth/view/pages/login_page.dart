@@ -1,13 +1,14 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:musicapp/core/theme/color_pallete.dart';
 import 'package:musicapp/core/utils.dart';
 import 'package:musicapp/core/widget/loader.dart';
-import 'package:musicapp/feature/auth/view/widget/index.dart';
+import 'package:musicapp/core/widget/index.dart';
 // import 'package:musicapp/feature/auth/repositories/auth_remote_repository.dart';
 // import 'package:fpdart/fpdart.dart' as fp;
 import 'package:musicapp/feature/auth/viewModel/auth_viewmodel.dart';
 import 'package:musicapp/feature/home/view/pages/homepage.dart';
+import 'package:musicapp/feature/home/view/pages/upload_song_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -20,25 +21,29 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    super.dispose();
     formKey.currentState!.validate();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     // final isLoading = ref.watch(authViewModelProvider)?.isLoading == true;
-    final isLoading = ref.watch(authViewModelProvider.select((value)=>value?.isLoading == true)); 
+    final isLoading = ref.watch(
+      authViewModelProvider.select((value) => value?.isLoading == true),
+    );
     ref.listen(authViewModelProvider, (_, next) {
       next?.when(
         data: (data) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Homepage()),
+            MaterialPageRoute(builder: (context) => UploadSongPage()),
+            // MaterialPageRoute(builder: (context) => Homepage()),
           );
         },
         error: (error, str) {
@@ -96,7 +101,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   email: emailController.text,
                                   password: passwordController.text,
                                 );
-                          }else {
+                          } else {
                             showSnackBar(context, 'Missing field');
                           }
                         },

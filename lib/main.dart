@@ -6,22 +6,31 @@ import 'package:musicapp/feature/auth/view/pages/login_page.dart';
 import 'package:musicapp/feature/auth/view/pages/signup_page.dart';
 import 'package:musicapp/feature/auth/viewModel/auth_viewmodel.dart';
 import 'package:musicapp/feature/home/view/pages/homepage.dart';
+import 'package:musicapp/feature/home/view/pages/upload_song_page.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  //? to initializae riverpod stateççç
   WidgetsFlutterBinding.ensureInitialized();
-  //? all read
+
+  // 🔥 Clear SharedPreferences first! kDebugMode
+  // final prefs = await SharedPreferences.getInstance();
+  // await prefs.clear();
+  // print("All SharedPreferences cleared on app start");
+
+  //? crea
   final container = ProviderContainer();
+
+  //? Init and try fetch data (will be empty after clear)
   await container.read(authViewModelProvider.notifier).initSharedPreference();
   await container.read(authViewModelProvider.notifier).getData();
-  // secod 
+
+  // secod
   // final container = ProviderContainer();
   // final notifier = container.read(authViewModelProvider.notifier);
   // await notifier.initSharedPreference();
   // final userModel = notifier.getData();
   // print(userModel);
   runApp(UncontrolledProviderScope(container: container, child: const MyApp()));
-  //   runApp(ProviderScope(child: MyApp(),container: container,));
 }
 
 class MyApp extends ConsumerWidget {
@@ -37,7 +46,8 @@ class MyApp extends ConsumerWidget {
       //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       // ),
       // home: LoginPage(),
-      home:currentUser == null ? const SignupPage() :const Homepage (),
+      // home: currentUser == null ? const SignupPage() : const LoginPage(),
+      home: currentUser == null ? const SignupPage() : const UploadSongPage(),
     );
   }
 }

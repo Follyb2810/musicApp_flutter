@@ -2,9 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 //? dart run build_runner watch -d
-
 
 part 'auth_local_repository.g.dart';
 
@@ -29,5 +27,15 @@ class AuthLocalRepository {
 
   String? getToken([String token = 'x-auth-token']) {
     return _sharedPreferences.getString(token);
+  }
+
+  Future<bool> removeToken([String token = 'x-auth-token']) {
+    return _sharedPreferences.remove(token);
+  }
+
+  Future<void> clearAppData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    print('All preferences cleared');
   }
 }

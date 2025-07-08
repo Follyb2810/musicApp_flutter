@@ -4,8 +4,9 @@ import 'package:musicapp/core/theme/color_pallete.dart';
 import 'package:musicapp/core/utils.dart';
 import 'package:musicapp/core/widget/loader.dart';
 import 'package:musicapp/feature/auth/view/pages/login_page.dart';
-import 'package:musicapp/feature/auth/view/widget/index.dart';
+import 'package:musicapp/core/widget/index.dart';
 import 'package:musicapp/feature/auth/viewModel/auth_viewmodel.dart';
+import 'package:musicapp/feature/home/view/pages/homepage.dart';
 // import 'package:musicapp/feature/auth/repositories/auth_remote_repository.dart';
 // import 'package:fpdart/fpdart.dart' as fp;
 
@@ -28,23 +29,25 @@ class _SignupPageState extends ConsumerState<SignupPage> {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
-    // formKey.currentState!.validate();
+    formKey.currentState!.validate();
     super.dispose();
   }
-  
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewModelProvider.select((value)=>value?.isLoading == true));
+    final isLoading = ref.watch(
+      authViewModelProvider.select((value) => value?.isLoading == true),
+    );
     // final isLoading = ref.watch(authViewModelProvider)?.isLoading == true;
 
     ref.listen(authViewModelProvider, (_, next) {
       next?.when(
         data: (data) {
           showSnackBar(context, 'Account created successfull');
-          Navigator.push(
+          Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
+            MaterialPageRoute(builder: (context) => Homepage()),
+            (_) => false,
           );
         },
         error: (error, str) {
@@ -105,7 +108,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                   name: nameController.text,
                                   password: passwordController.text,
                                 );
-                          }else {
+                          } else {
                             showSnackBar(context, 'Missing filed');
                           }
                         },
